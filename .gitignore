@@ -1,0 +1,7 @@
+# ignore auto gen folders
+*.py[cod]
+.vscode/
+__pycache__/
+
+# ignore aml configs
+.aml_config/
