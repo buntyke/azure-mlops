@@ -6,10 +6,10 @@
 import pytest
 
 # relative imports
-from src.utils import set_env_vars, get_svc_pr, get_ws
+from src.aml_scripts.utils import set_env_vars, get_svc_pr, get_ws
 
 
-@pytest.mark.parametrize('config_path', ['.aml_config/config.json'])
+@pytest.mark.parametrize('config_path', ['src/aml_scripts/.aml_config/config.json'])
 def test_env_vars(config_path):
     # set env variables
     status = set_env_vars(config_path)
@@ -18,7 +18,7 @@ def test_env_vars(config_path):
     assert status
 
 
-@pytest.mark.parametrize('config_path', ['.aml_config/config.json'])
+@pytest.mark.parametrize('config_path', ['src/aml_scripts/.aml_config/config.json'])
 def test_authentication(config_path):
     # set env variables
     set_env_vars(config_path)
@@ -30,7 +30,7 @@ def test_authentication(config_path):
     assert svc_pr
 
 
-@pytest.mark.parametrize('config_path', ['.aml_config/config.json'])
+@pytest.mark.parametrize('config_path', ['src/aml_scripts/.aml_config/config.json'])
 def test_ws_init(config_path):
     # set env variables
     set_env_vars(config_path)

@@ -1,0 +1,12 @@
+name: classification-training
+
+dependencies:
+- python=3.7
+- pip:
+  - matplotlib
+  - azureml-sdk
+  - azureml-widgets
+- scikit-learn
+
+channels:
+- conda-forge

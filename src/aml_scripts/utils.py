@@ -5,7 +5,9 @@
 # import modules
 import os
 import json
+from azureml.core.compute import AmlCompute
 from azureml.core.workspace import Workspace
+from azureml.core.compute import ComputeTarget
 from azureml.core.authentication import ServicePrincipalAuthentication
 
 
@@ -92,3 +94,40 @@ def get_ws(svc_pr):
         return None
     else:
         return ws
+
+
+def get_compute_target(ws, compute_name, compute_type, compute_nodes, compute_priority):
+    # choose a name for your cluster and node limits
+    compute_min_nodes = 0
+    compute_name = compute_name
+    compute_max_nodes = compute_nodes
+    compute_priority = compute_priority
+
+    # setup cpu based vm for computation
+    vm_size = compute_type
+
+    if compute_name in ws.compute_targets:
+        compute_target = ws.compute_targets[compute_name]
+        if compute_target and type(compute_target) is AmlCompute:
+            print('Found compute target. Using: ' + compute_name)
+    else:
+        print('Create compute target. Using: ' + compute_name)
+
+        # setup provisioning configuration
+        provisioning_config = AmlCompute.provisioning_configuration(vm_size=vm_size,
+                                                                    min_nodes=compute_min_nodes,
+                                                                    max_nodes=compute_max_nodes,
+                                                                    vm_priority=compute_priority)
+
+        # create the cluster
+        compute_target = ComputeTarget.create(
+            ws, compute_name, provisioning_config)
+
+        # can poll for a minimum number of nodes and for a specific timeout.
+        compute_target.wait_for_completion(
+            show_output=True, min_node_count=None, timeout_in_minutes=20)
+
+        # for a more detailed view of current AmlCompute status, use get_status()
+        print(compute_target.get_status().serialize())
+
+    return compute_target
